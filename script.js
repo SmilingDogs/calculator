@@ -64,8 +64,15 @@ class Calculator {
 
     switch (operation) {
       case "divide":
-        this.currentResult =
-          operand2 === 0 ? "Err" : (operand1 / operand2).toFixed(2);
+        if (operand2 === 0) {
+          this.currentResult = "Err";
+        }
+        let division = (operand1 / operand2).toString();
+        if (division.split(".")[1]?.length > 2) {
+          this.currentResult = Number(division).toFixed(12);
+        } else {
+          this.currentResult = division;
+        }
         break;
       case "multiply":
         this.currentResult = (operand1 * operand2).toString();

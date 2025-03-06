@@ -75,13 +75,13 @@ class Calculator {
         }
         break;
       case "multiply":
-        this.currentResult = (operand1 * operand2).toString();
+        this.currentResult = (operand1 * operand2).toFixed(12);
         break;
       case "subtract":
-        this.currentResult = (operand1 - operand2).toString();
+        this.currentResult = (operand1 - operand2).toFixed(12);
         break;
       case "add":
-        this.currentResult = (operand1 + operand2).toString();
+        this.currentResult = (operand1 + operand2).toFixed(12);
         break;
     }
     this.updateResult();

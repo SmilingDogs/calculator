@@ -1,18 +1,32 @@
 class Calculator {
   constructor() {
-    this.currentDisplay = "0";
+    this.currentResult = "0";
+    this.currentOperation = "";
   }
 
-  updateDisplay() {
-    const display = document.querySelector(".display");
-    display.textContent = this.currentDisplay;
+  updateOperation() {
+    const operation = document.querySelector(".operation");
+    operation.textContent = this.currentOperation;
   }
 
-  appendToDisplay(value) {
-    if (this.currentDisplay === "0" && value !== ".") {
-      this.currentDisplay = "";
+  updateResult() {
+    const result = document.querySelector(".result");
+    result.textContent = this.currentResult;
+  }
+
+  appendToOperation(value) {
+    this.currentOperation += value;
+  }
+
+  appendToResult(value) {
+    if (this.currentResult === "0" && value !== ".") {
+      this.currentResult = "";
     }
-    this.currentDisplay += value;
+    this.currentResult += value;
+  }
+
+  getCurrentResult() {
+    return this.currentResult;
   }
 
   defineOperation() {
@@ -23,7 +37,7 @@ class Calculator {
       "+": "add",
     };
     for (const [symbol, operation] of Object.entries(operations)) {
-      if (this.currentDisplay.slice(1).includes(symbol)) {
+      if (this.currentOperation.slice(1).includes(symbol)) {
         return operation;
       }
     }
@@ -35,37 +49,46 @@ class Calculator {
     if (!operation) return;
 
     let operand1, operand2;
-    if (this.currentDisplay[0] == "-") {
-      const parts = this.currentDisplay.slice(1).split(/[:*+-]/);
+    if (this.currentOperation[0] == "-") {
+      const parts = this.currentOperation.slice(1, -1).split(/[:*+-]/);
       operand1 = -Number(parts[0]);
       operand2 = Number(parts[1]);
     } else {
-      [operand1, operand2] = this.currentDisplay.split(/[:*+-]/).map(Number);
+      [operand1, operand2] = this.currentOperation
+        .slice(0, -1)
+        .split(/[:*+-]/)
+        .map(Number);
     }
 
     if (isNaN(operand1) || isNaN(operand2)) return;
 
     switch (operation) {
       case "divide":
-        this.currentDisplay =
+        this.currentResult =
           operand2 === 0 ? "Err" : (operand1 / operand2).toString();
         break;
       case "multiply":
-        this.currentDisplay = (operand1 * operand2).toString();
+        this.currentResult = (operand1 * operand2).toString();
         break;
       case "subtract":
-        this.currentDisplay = (operand1 - operand2).toString();
+        this.currentResult = (operand1 - operand2).toString();
         break;
       case "add":
-        this.currentDisplay = (operand1 + operand2).toString();
+        this.currentResult = (operand1 + operand2).toString();
         break;
     }
-    this.updateDisplay();
+    this.updateResult();
   }
 
   clear() {
-    this.currentDisplay = "0";
-    this.updateDisplay();
+    this.currentOperation = "";
+    this.currentResult = "0";
+    this.updateResult();
+    this.updateOperation();
+  }
+
+  clearResult() {
+    this.currentResult = "";
   }
 
   handleButtonClick(e) {
@@ -78,12 +101,23 @@ class Calculator {
         break;
       }
       case "=": {
+        this.appendToOperation(value);
+        this.updateOperation();
         this.performOperation();
         break;
       }
       default: {
-        this.appendToDisplay(value);
-        this.updateDisplay();
+        let result = this.getCurrentResult();
+        const isOperator = /[=:*+-]/.test(value);
+        if (isOperator) {
+          this.clearResult();
+          this.currentOperation = result;
+        } else {
+          this.appendToResult(value);
+          this.updateResult();
+        }
+        this.appendToOperation(value);
+        this.updateOperation();
         break;
       }
     }

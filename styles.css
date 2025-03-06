@@ -48,13 +48,18 @@ body {
   border-radius: 10px;
   margin-bottom: 20px;
   text-align: right;
-  font-size: 2.4em;
   color: black;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
 }
-
+.operation {
+  font-size: 1.3em;
+  height: 28px;
+}
+.result {
+  font-size: 2.4em;
+}
 button {
   padding: 15px;
   border: none;

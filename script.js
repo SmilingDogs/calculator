@@ -48,10 +48,10 @@ class Calculator {
     switch (operation) {
       case "divide":
         this.currentDisplay =
-          operand2 === 0 ? "Err" : (operand1 / operand2).toFixed(2).toString();
+          operand2 === 0 ? "Err" : (operand1 / operand2).toString();
         break;
       case "multiply":
-        this.currentDisplay = (operand1 * operand2).toFixed(2).toString();
+        this.currentDisplay = (operand1 * operand2).toString();
         break;
       case "subtract":
         this.currentDisplay = (operand1 - operand2).toString();

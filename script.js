@@ -69,19 +69,19 @@ class Calculator {
         }
         let division = (operand1 / operand2).toString();
         if (division.split(".")[1]?.length > 2) {
-          this.currentResult = Number(division).toFixed(12);
+          this.currentResult = Number(division).toFixed(12).toString();
         } else {
           this.currentResult = division;
         }
         break;
       case "multiply":
-        this.currentResult = (operand1 * operand2).toFixed(12);
+        this.currentResult = (operand1 * operand2).toString();
         break;
       case "subtract":
-        this.currentResult = (operand1 - operand2).toFixed(12);
+        this.currentResult = (operand1 - operand2).toString();
         break;
       case "add":
-        this.currentResult = (operand1 + operand2).toFixed(12);
+        this.currentResult = (operand1 + operand2).toString();
         break;
     }
     this.updateResult();

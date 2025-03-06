@@ -1,0 +1,90 @@
+:root {
+  --glass-color: rgba(255, 255, 255, 0.2);
+  --buttons-color: rgba(0, 0, 0, 0.63);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: normal;
+}
+
+body {
+  background: linear-gradient(45deg, hsl(232, 91%, 58%), hsl(274, 89%, 15%));
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 75px);
+  grid-template-rows: repeat(5, 75px);
+  gap: 15px;
+  grid-template-areas:
+    "clear divide multiply minus"
+    "number-7 number-8 number-9 plus"
+    "number-4 number-5 number-6 plus"
+    "number-1 number-2 number-3 equals"
+    "number-0 number-0 dot equals";
+}
+
+.calculator {
+  background-color: darkgrey;
+  backdrop-filter: blur(10px);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--buttons-color);
+  border: 1px solid var(--glass-color);
+}
+
+.display {
+  background: var(--glass-color);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: right;
+  font-size: 2.4em;
+  color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+button {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.5em;
+  cursor: pointer;
+  background: var(--buttons-color);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: var(--buttons-color);
+  transform: scale(1.1);
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.operator {
+  background-color: rgba(29, 4, 38, 0.4);
+}
+
+.equals {
+  background-color: coral;
+}
+
+.clear {
+  background: rgb(190, 149, 136);
+  font-weight: bold;
+  font-size: 1.6em;
+}

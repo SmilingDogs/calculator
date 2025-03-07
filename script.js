@@ -52,13 +52,11 @@ class Calculator {
     if (this.currentOperation[0] == "-") {
       const parts = this.currentOperation.slice(1, -1).split(/[:*+-]/);
       operand1 = -Number(parts[0]);
-      operand2 = Number(parts[1]);
     } else {
-      [operand1, operand2] = this.currentOperation
-        .slice(0, -1)
-        .split(/[:*+-]/)
-        .map(Number);
+      //prettier-ignore
+      [operand1] = this.currentOperation.slice(0, -1).split(/[:*+-]/).map(Number);
     }
+    operand2 = Number(this.getCurrentResult());
 
     if (isNaN(operand1) || isNaN(operand2)) return;
 
@@ -66,12 +64,13 @@ class Calculator {
       case "divide":
         if (operand2 === 0) {
           this.currentResult = "Err";
-        }
-        let division = (operand1 / operand2).toString();
-        if (division.split(".")[1]?.length > 2) {
-          this.currentResult = Number(division).toFixed(12).toString();
         } else {
-          this.currentResult = division;
+          let division = (operand1 / operand2).toString();
+          if (division.split(".")[1]?.length > 2) {
+            this.currentResult = Number(division).toFixed(12).toString();
+          } else {
+            this.currentResult = division;
+          }
         }
         break;
       case "multiply":
@@ -108,6 +107,7 @@ class Calculator {
         break;
       }
       case "=": {
+        this.appendToOperation(this.getCurrentResult());
         this.appendToOperation(value);
         this.updateOperation();
         this.performOperation();
@@ -119,12 +119,12 @@ class Calculator {
         if (isOperator) {
           this.clearResult();
           this.currentOperation = result;
+          this.appendToOperation(value);
+          this.updateOperation();
         } else {
           this.appendToResult(value);
           this.updateResult();
         }
-        this.appendToOperation(value);
-        this.updateOperation();
         break;
       }
     }

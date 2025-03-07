@@ -4,25 +4,17 @@ class Calculator {
     this.currentOperation = "";
   }
 
-  updateOperation() {
-    const operation = document.querySelector(".operation");
-    operation.textContent = this.currentOperation;
+  updateDisplay(selector, value) {
+    document.querySelector(selector).textContent = value;
   }
 
-  updateResult() {
-    const result = document.querySelector(".result");
-    result.textContent = this.currentResult;
-  }
-
-  appendToOperation(value) {
-    this.currentOperation += value;
-  }
-
-  appendToResult(value) {
-    if (this.currentResult === "0" && value !== ".") {
-      this.currentResult = "";
+  appendTo(target, value) {
+    //prettier-ignore
+    if (target === "currentResult" && this.currentResult === "0" && value !== "." ) {
+      this.currentResult = value;
+    } else {
+      this[target] += value;
     }
-    this.currentResult += value;
   }
 
   getCurrentResult() {
@@ -83,18 +75,14 @@ class Calculator {
         this.currentResult = (operand1 + operand2).toString();
         break;
     }
-    this.updateResult();
+    this.updateDisplay(".result", this.currentResult);
   }
 
   clear() {
     this.currentOperation = "";
     this.currentResult = "0";
-    this.updateResult();
-    this.updateOperation();
-  }
-
-  clearResult() {
-    this.currentResult = "";
+    this.updateDisplay(".result", this.currentResult);
+    this.updateDisplay(".operation", this.currentOperation);
   }
 
   handleButtonClick(e) {
@@ -102,31 +90,27 @@ class Calculator {
     if (!value) return;
 
     switch (value) {
-      case "C": {
+      case "C":
         this.clear();
         break;
-      }
-      case "=": {
-        this.appendToOperation(this.getCurrentResult());
-        this.appendToOperation(value);
-        this.updateOperation();
+      case "=":
+        this.appendTo("currentOperation", this.getCurrentResult());
+        this.appendTo("currentOperation", value);
+        this.updateDisplay(".operation", this.currentOperation);
         this.performOperation();
         break;
-      }
-      default: {
-        let result = this.getCurrentResult();
+      default:
         const isOperator = /[=:*+-]/.test(value);
         if (isOperator) {
-          this.clearResult();
-          this.currentOperation = result;
-          this.appendToOperation(value);
-          this.updateOperation();
+          this.currentOperation = this.getCurrentResult();
+          this.appendTo("currentOperation", value);
+          this.updateDisplay(".operation", this.currentOperation);
+          this.currentResult = "";
         } else {
-          this.appendToResult(value);
-          this.updateResult();
+          this.appendTo("currentResult", value);
+          this.updateDisplay(".result", this.currentResult);
         }
         break;
-      }
     }
   }
 

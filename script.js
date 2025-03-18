@@ -124,6 +124,10 @@ class Calculator {
             this.setResult("");
             this.setOperationSymbol(value);
           } else {
+            if (this.expression.match(/[0-9]/)) {
+              this.setOperand1(Number(this.expression.replace(regex, "")));
+            }
+
             if (this.expression.match(/[+\-*:/=]/)) {
               this.setOperand1(Number(this.result));
               this.expression = this.getOperand1().toString();

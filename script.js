@@ -101,12 +101,12 @@ class Calculator {
         this.updateDisplay(".expression", this.expression);
         this.updateDisplay(".result", this.result);
         this.setOperand1(Number(this.result));
-        this.setResult(this.result);
         this.setOperationSymbol(""); // Reset the operation after performing it
         break;
       default:
         const regex = /[+\-*:/]/;
         let isOperator = regex.test(value);
+
         if (isOperator) {
           if (this.expression.slice(-1).match(regex)) {
             this.expression = this.expression.slice(0, -1);
@@ -115,11 +115,8 @@ class Calculator {
           //* If the expression already has operand1, operation symbol, and operand2
           if (this.operand1 && this.operation && this.result) {
             this.setOperand2(Number(this.result));
-            this.result = this.performOperation(
-              this.operand1,
-              this.operand2,
-              this.operation
-            );
+            //prettier-ignore
+            this.result = this.performOperation(this.operand1, this.operand2, this.operation);
             this.updateDisplay(".result", this.result);
             this.expression = this.result + value;
             this.updateDisplay(".expression", this.expression);
@@ -127,10 +124,6 @@ class Calculator {
             this.setResult("");
             this.setOperationSymbol(value);
           } else {
-            if (this.expression.match(/[0-9]/)) {
-              this.setOperand1(Number(this.expression.replace(regex, "")));
-            }
-
             if (this.expression.match(/[+\-*:/=]/)) {
               this.setOperand1(Number(this.result));
               this.expression = this.getOperand1().toString();

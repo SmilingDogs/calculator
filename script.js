@@ -82,6 +82,7 @@ class Calculator {
   handleButtonClick(e) {
     const value = e.target.getAttribute("data-value");
     if (!value) return;
+    const regex = /[+\-*:/]/;
 
     switch (value) {
       case "C":
@@ -89,6 +90,11 @@ class Calculator {
         break;
       case "=":
         if (!this.getOperand1() || !this.operation) {
+          return;
+        }
+        if (this.expression.slice(-1).match(regex)) {
+          this.appendTo("result", "Err");
+          this.updateDisplay(".result", this.result);
           return;
         }
         this.setOperand2(Number(this.result));
@@ -104,7 +110,6 @@ class Calculator {
         this.setOperationSymbol(""); // Reset the operation after performing it
         break;
       default:
-        const regex = /[+\-*:/]/;
         let isOperator = regex.test(value);
 
         if (isOperator) {

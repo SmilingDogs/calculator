@@ -53,7 +53,7 @@ body {
   text-overflow: ellipsis;
   width: 100%;
 }
-.operation {
+.expression {
   font-size: 1.3em;
   height: 28px;
 }

@@ -5,6 +5,7 @@ class Calculator {
     this.operand2 = 0;
     this.operation = ""; //*Symbol of the operation
     this.expression = ""; //*The full expression (1st row)
+    this.isOperationComplete = false;
   }
 
   updateDisplay(selector, value) {
@@ -108,6 +109,7 @@ class Calculator {
         this.updateDisplay(".result", this.result);
         this.setOperand1(Number(this.result));
         this.setOperationSymbol(""); // Reset the operation after performing it
+        this.isOperationComplete = true;
         break;
       default:
         let isOperator = regex.test(value);
@@ -144,6 +146,10 @@ class Calculator {
             this.setResult("");
           }
         } else {
+          if (this.isOperationComplete) {
+            this.clear();
+            this.isOperationComplete = false;
+          }
           this.appendTo("expression", value);
           this.updateDisplay(".expression", this.expression);
           this.appendTo("result", value);

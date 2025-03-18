@@ -1,16 +1,16 @@
 class Calculator {
   constructor() {
-    this.result = "0"; //*The result of the operation
+    this.result = "0"; //*The result of the operation (2 row)
     this.operand1 = 0;
     this.operand2 = 0;
     this.operation = ""; //*Symbol of the operation
-    this.expression = ""; //*The expression to be evaluated on the display (1st row)
+    this.expression = ""; //*The full expression (1st row)
   }
-  //*show the value in the display
+
   updateDisplay(selector, value) {
     document.querySelector(selector).textContent = value;
   }
-  //*change the values of Class properties
+
   appendTo(target, value) {
     //prettier-ignore
     if (target === "result" && this.result === "0" && value !== "." ) {
@@ -20,11 +20,7 @@ class Calculator {
     }
   }
 
-  getCurrentResult() {
-    return this.result;
-  }
-
-  setCurrentResult(value) {
+  setResult(value) {
     this.result = value;
   }
 
@@ -36,10 +32,6 @@ class Calculator {
     this.operand1 = value;
   }
 
-  getOperand2() {
-    return this.operand2;
-  }
-
   setOperand2(value) {
     this.operand2 = value;
   }
@@ -48,25 +40,8 @@ class Calculator {
     this.operation = value;
   }
 
-  // defineOperation() {
-  //   const operations = {
-  //     ":": "divide",
-  //     "*": "multiply",
-  //     "-": "subtract",
-  //     "+": "add",
-  //   };
-  //   for (const [symbol, operation] of Object.entries(operations)) {
-  //     if (this.expression.slice(1).includes(symbol)) {
-  //       return operation;
-  //     }
-  //   }
-  //   return null;
-  // }
-
   performOperation(operand1, operand2, operation) {
-    // const operation = this.defineOperation();
-    if (!operation) return;
-    if (isNaN(operand1) || isNaN(operand2)) return;
+    if (isNaN(operand1) || isNaN(operand2) || !operation) return;
 
     switch (operation) {
       case ":":
@@ -97,6 +72,9 @@ class Calculator {
   clear() {
     this.expression = "";
     this.result = "0";
+    this.operand1 = 0;
+    this.operand2 = 0;
+    this.operation = "";
     this.updateDisplay(".result", this.result);
     this.updateDisplay(".expression", this.expression);
   }
@@ -110,37 +88,60 @@ class Calculator {
         this.clear();
         break;
       case "=":
-        this.appendTo("expression", value);
+        if (!this.getOperand1() || !this.operation) {
+          return;
+        }
+        this.setOperand2(Number(this.result));
         this.result = this.performOperation(
           this.operand1,
           this.operand2,
           this.operation
         );
+        this.expression += value;
         this.updateDisplay(".expression", this.expression);
         this.updateDisplay(".result", this.result);
+        this.setOperand1(Number(this.result));
+        this.setResult(this.result);
+        this.setOperationSymbol(""); // Reset the operation after performing it
         break;
       default:
-        let isOperator = /[+\-*:]/.test(value);
-        let isNumber = /[0-9]/.test(value);
+        const regex = /[+\-*:/]/;
+        let isOperator = regex.test(value);
         if (isOperator) {
-          this.setCurrentResult("");
-          //todo 1) if operator is clicked again, replace the previous operator. Check if the last character is operator
-          if (this.expression.slice(-1).match(/[+\-*:/]/)) {
+          if (this.expression.slice(-1).match(regex)) {
             this.expression = this.expression.slice(0, -1);
           }
-          this.setOperationSymbol(value);
-          this.appendTo("expression", value);
-          this.updateDisplay(".expression", this.expression);
 
-          //todo 2 if the operator is clicked after second operand. calcuclate the result and append it to cuurent operation
-        } else {
-          if (!this.expression.match(/[0-9]/)) {
-            this.setOperand1(Number(value));
-            // console.log(this.operand1);
+          //* If the expression already has operand1, operation symbol, and operand2
+          if (this.operand1 && this.operation && this.result) {
+            this.setOperand2(Number(this.result));
+            this.result = this.performOperation(
+              this.operand1,
+              this.operand2,
+              this.operation
+            );
+            this.updateDisplay(".result", this.result);
+            this.expression = this.result + value;
+            this.updateDisplay(".expression", this.expression);
+            this.setOperand1(Number(this.result));
+            this.setResult("");
+            this.setOperationSymbol(value);
           } else {
-            this.setOperand2(Number(value));
-            // console.log(this.operand2);
+            if (this.expression.match(/[0-9]/)) {
+              this.setOperand1(Number(this.expression.replace(regex, "")));
+            }
+
+            if (this.expression.match(/[+\-*:/=]/)) {
+              this.setOperand1(Number(this.result));
+              this.expression = this.getOperand1().toString();
+            }
+
+            this.setOperationSymbol(value);
+            this.appendTo("expression", value);
+            this.updateDisplay(".expression", this.expression);
+            this.setResult("");
           }
+        } else {
           this.appendTo("expression", value);
           this.updateDisplay(".expression", this.expression);
           this.appendTo("result", value);

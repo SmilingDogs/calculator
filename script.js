@@ -51,7 +51,7 @@ class Calculator {
         } else {
           let division = (operand1 / operand2).toString();
           if (division.split(".")[1]?.length > 2) {
-            this.result = Number(division).toFixed(12).toString();
+            this.result = Number(division).toFixed(8).toString();
           } else {
             this.result = division;
           }
@@ -90,7 +90,7 @@ class Calculator {
         this.clear();
         break;
       case "=":
-        if (!this.getOperand1() || !this.operation) {
+        if (!this.getOperand1() && !this.operation) {
           return;
         }
         if (this.expression.slice(-1).match(regex)) {
@@ -119,8 +119,8 @@ class Calculator {
             this.expression = this.expression.slice(0, -1);
           }
 
-          //* If the expression already has operand1, operation symbol, and operand2
-          if (this.operand1 && this.operation && this.result) {
+          //* If the expression already has operand1 (can be 0), operation symbol, and operand2
+          if (this.operation && this.result) {
             this.setOperand2(Number(this.result));
             //prettier-ignore
             this.result = this.performOperation(this.operand1, this.operand2, this.operation);
@@ -146,7 +146,7 @@ class Calculator {
             this.setResult("");
           }
         } else {
-          if (this.isOperationComplete) {
+          if (this.expression.slice(-1) == "=") {
             this.clear();
             this.isOperationComplete = false;
           }

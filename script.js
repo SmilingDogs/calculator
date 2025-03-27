@@ -168,3 +168,44 @@ class Calculator {
 
 const calculator = new Calculator();
 calculator.init();
+
+class UnitsConverter {
+  constructor() {
+    this.unitsFrom = "";
+    this.unitsTo = "";
+  }
+
+  handleDropdownClick(e) {
+    // const accordion = e.target.matches(".accordion")
+    //   ? e.target
+    //   : e.target.closest(".accordion");
+    // if (!accordion) return;
+    // accordion.classList.toggle("active");
+    const accordion = document.querySelector(".accordion");
+
+    const right = accordion.querySelector(".chevron-right");
+    right.classList.add("rotate");
+
+    const content = document.querySelector(".accordion__content");
+    if (content.style.maxHeight === "0px") {
+      content.style.maxHeight = content.scrollHeight + "px"; // opening
+    }
+
+    content.addEventListener("click", (e) => {
+      let unit = e.target.textContent;
+      console.log(unit);
+      accordion.querySelector(".accordion__title").textContent = unit;
+      right.classList.remove("rotate");
+      content.style.maxHeight = "0px";
+    });
+  }
+
+  init() {
+    document.querySelector(".accordion").addEventListener("click", (e) => {
+      this.handleDropdownClick(e);
+    });
+  }
+}
+
+const converter = new UnitsConverter();
+converter.init();

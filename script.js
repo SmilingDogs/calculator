@@ -120,6 +120,9 @@ class Calculator {
         this.isOperationComplete = true;
         break;
       case "%":
+        if (this.expression.slice(-1).match("=" || regex)) {
+          return;
+        }
         if (!this.getOperand1() && !this.operation) {
           return;
         }
